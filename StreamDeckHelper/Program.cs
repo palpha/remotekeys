@@ -8,55 +8,44 @@ Config ReadConfig() =>
 	?? throw new InvalidOperationException( "Unable to read config." );
 
 InputSimulator input = new();
-var config = ReadConfig();
-
-IEnumerable<VirtualKeyCode> ParseModifiers( string[] keys )
-{
-	foreach ( var key in keys )
-	{
-		yield return key.ToUpperInvariant() switch
-			{
-				"CONTROL" => VirtualKeyCode.CONTROL,
-				"CTRL" => VirtualKeyCode.CONTROL,
-				"SHIFT" => VirtualKeyCode.SHIFT,
-				"LWIN" => VirtualKeyCode.LWIN,
-				"WIN" => VirtualKeyCode.LWIN,
-				var x => throw new InvalidOperationException( $"Invalid modifier {x}." )
-			};
-	}
-}
+// ReSharper disable once UseDeconstruction
+// ReSharper disable once SuggestVarOrType_SimpleTypes
+Config config = ReadConfig();
 
 VirtualKeyCode ParseKey( string str ) =>
 	str.ToUpperInvariant() switch
 		{
-			var x when x[0] == 'F' => Enum.Parse<VirtualKeyCode>( x ),
 			var x when x.Length == 1 => Enum.Parse<VirtualKeyCode>( $"VK_{x}" ),
+			"WIN" => VirtualKeyCode.LWIN,
 			"ESC" => VirtualKeyCode.ESCAPE,
-			"ESCAPE" => VirtualKeyCode.ESCAPE,
-			var x => throw new InvalidOperationException( $"Invalid key {x}." )
+			"ALT" => VirtualKeyCode.MENU,
+			"CTRL" => VirtualKeyCode.CONTROL,
+			var x => Enum.Parse<VirtualKeyCode>( x )
 		};
 
-void LoggedKeyPress( VirtualKeyCode key )
+IEnumerable<VirtualKeyCode> ParseKeys( IEnumerable<string> keys ) => keys.Select( ParseKey );
+
+void KeyPress( VirtualKeyCode key )
 {
 	Console.WriteLine( $"Key: {key}." );
 	input.Keyboard.KeyPress( key );
 }
 
-void LoggedModifiedKeyStroke( IEnumerable<VirtualKeyCode> modifiers, VirtualKeyCode key )
+void ModifiedKeyStroke( IEnumerable<VirtualKeyCode> modifiers, VirtualKeyCode key )
 {
 	var modifierKeyCodes = modifiers.ToList();
 	Console.WriteLine( $"Modifiers: {string.Join( ", ", modifierKeyCodes )}; key: {key}." );
 	input.Keyboard.ModifiedKeyStroke( modifierKeyCodes, key );
 }
 
-bool LoggedTextEntry( string str )
+bool TextEntry( string str )
 {
 	Console.WriteLine( $"Text entry: {str}." );
 	input.Keyboard.TextEntry( str );
 	return true;
 }
 
-bool ParseKeys( string[] keyPresses )
+bool ParseKeyPresses( string[] keyPresses )
 {
 	var sequence = new List<Action>();
 
@@ -72,14 +61,19 @@ bool ParseKeys( string[] keyPresses )
 		var parts = keyPress.Split( '+' );
 		if ( parts.Length == 1 )
 		{
+			if ( config.EnableText == false )
+			{
+				throw new InvalidOperationException( "Text input not allowed." );
+			}
+
 			var key = ParseKey( parts[0] );
-			sequence.Add( () => LoggedKeyPress( key ) );
+			sequence.Add( () => KeyPress( key ) );
 		}
 		else
 		{
-			var modifiers = ParseModifiers( parts[..^1] );
-			var key = ParseKey( parts.Last() );
-			sequence.Add( () => LoggedModifiedKeyStroke( modifiers, key ) );
+			var modifiers = ParseKeys( parts[..^1] );
+			var key = ParseKey( parts[^1] );
+			sequence.Add( () => ModifiedKeyStroke( modifiers, key ) );
 		}
 	}
 
@@ -94,8 +88,8 @@ bool ParseKeys( string[] keyPresses )
 bool Parse( string[] command ) =>
 	command[0] switch
 		{
-			"text" when config.EnableText => LoggedTextEntry( command[1] ),
-			"keys" => ParseKeys( command[1..] ),
+			"text" when config.EnableText => TextEntry( command[1] ),
+			"keys" => ParseKeyPresses( command[1..] ),
 			_ => false
 		};
 
