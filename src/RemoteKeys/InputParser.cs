@@ -9,7 +9,7 @@ public record TextEntry( string Text ) : Instruction;
 public record ModifiedKeyPress( IEnumerable<VirtualKeyCode> Modifiers, VirtualKeyCode Key ) : Instruction;
 public record KeyPress( VirtualKeyCode Key ) : Instruction;
 
-public class InputParser
+public class InputParser : IInputParser
 {
 	private VirtualKeyCode ParseKey( string str ) =>
 		str.ToUpperInvariant() switch
@@ -19,6 +19,7 @@ public class InputParser
 				"ESC" => VirtualKeyCode.ESCAPE,
 				"ALT" => VirtualKeyCode.MENU,
 				"CTRL" => VirtualKeyCode.CONTROL,
+				"ENTER" => VirtualKeyCode.RETURN,
 				var x => Enum.Parse<VirtualKeyCode>( x )
 			};
 

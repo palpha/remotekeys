@@ -22,6 +22,7 @@ public class InputParserTests
 		yield return AsArguments( "alt", new KeyPress( VirtualKeyCode.MENU ) );
 		yield return AsArguments( "win", new KeyPress( VirtualKeyCode.LWIN ) );
 		yield return AsArguments( "esc", new KeyPress( VirtualKeyCode.ESCAPE ) );
+		yield return AsArguments( "enter", new KeyPress( VirtualKeyCode.RETURN ) );
 
 		// modifiers:
 		yield return AsArguments( "control", new KeyPress( VirtualKeyCode.CONTROL ) );

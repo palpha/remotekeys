@@ -34,6 +34,8 @@
 		<Using Include="Xunit"/>
 		<Using Include="System"/>
 		<Using Include="System.Collections.Generic"/>
+		<Using Include="System.Linq"/>
+		<Using Include="System.Text.RegularExpressions"/>
 	</ItemGroup>
 
 </Project>

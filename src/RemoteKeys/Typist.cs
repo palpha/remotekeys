@@ -1,18 +1,27 @@
 ﻿using InputSimulatorStandard;
+using Microsoft.Extensions.Logging;
 
 namespace RemoteKeys;
 
-public class Typist
+public class Typist : ITypist
 {
 	private IKeyboardSimulator Keyboard { get; }
+	private ILogger<Typist> Logger { get; }
 
-	public Typist( IKeyboardSimulator keyboard ) =>
+	public Typist(
+		IKeyboardSimulator keyboard,
+		ILogger<Typist> logger )
+	{
 		Keyboard = keyboard;
+		Logger = logger;
+	}
 
 	public void Feed( IEnumerable<Instruction> instructions )
 	{
 		foreach ( var instruction in instructions )
 		{
+			Logger.LogInformation( "Handling {instruction}", instruction );
+
 			_ = instruction switch
 				{
 					Delay x => Keyboard.Sleep( x.Milliseconds ),

@@ -5,3 +5,4 @@
 resharper_align_multiline_statement_conditions=false
 resharper_blank_lines_around_single_line_type=0
 resharper_space_within_nameof_parentheses=true
+resharper_space_within_new_parentheses=true
