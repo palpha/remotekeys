@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckHelper", "StreamDeckHelper\StreamDeckHelper.csproj", "{7CAF53D9-0B35-4526-918A-988549916F65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteKeys", "src\RemoteKeys\RemoteKeys.csproj", "{7CAF53D9-0B35-4526-918A-988549916F65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteKeys.Tests", "tests\RemoteKeys.Tests\RemoteKeys.Tests.csproj", "{05CE49B1-6D8D-4F18-B04A-7850F026FC5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7CAF53D9-0B35-4526-918A-988549916F65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CAF53D9-0B35-4526-918A-988549916F65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CAF53D9-0B35-4526-918A-988549916F65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05CE49B1-6D8D-4F18-B04A-7850F026FC5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05CE49B1-6D8D-4F18-B04A-7850F026FC5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05CE49B1-6D8D-4F18-B04A-7850F026FC5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05CE49B1-6D8D-4F18-B04A-7850F026FC5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
